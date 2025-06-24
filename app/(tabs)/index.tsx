@@ -1,12 +1,22 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { useAuth } from '@/contexts/AuthContextProvider';
+import { useRouter } from 'expo-router';
 
 export default function HomeScreen() {
+  const router = useRouter();
+  const { logOut } = useAuth();
+
+  const handleLogOut = () => {
+    logOut();
+    router.replace('/log-in')
+  }
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -51,6 +61,17 @@ export default function HomeScreen() {
           <ThemedText type="defaultSemiBold">app-example</ThemedText>.
         </ThemedText>
       </ThemedView>
+      <ThemedView>
+        <ThemedText>Step 4: Geta fresh start</ThemedText>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleLogOut}
+        >
+          <Text style={styles.buttonText}>
+            Cerrar Sesión
+          </Text>
+        </TouchableOpacity>
+      </ThemedView>
     </ParallaxScrollView>
   );
 }
@@ -71,5 +92,17 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     position: 'absolute',
+  },
+  button: {
+    width: "100%",
+    backgroundColor: "#007AFF",
+    padding: 16,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });

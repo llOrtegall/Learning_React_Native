@@ -1,11 +1,21 @@
-import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContextProvider";
+import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 
 export default function LogInScreen() {
+  const { logIn, isAuth } = useAuth();
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isAuth) {
+      router.replace("/(tabs)"); // Redirige al stack principal
+    }
+  }, [isAuth]);
 
   const handleSubmit = () => {
     if (!username || !password) {
@@ -13,10 +23,10 @@ export default function LogInScreen() {
       return;
     }
     setLoading(true);
-    // Aquí iría la lógica real de login
+    // Simulación de login exitoso
     setTimeout(() => {
       setLoading(false);
-      Alert.alert("Login", `Usuario: ${username}\nContraseña: ${password}`);
+      logIn(); // Cambia el estado global a autenticado
     }, 1000);
   };
 
@@ -58,7 +68,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-    paddingBottom: 220,
     backgroundColor: "#fff",
   },
   title: {

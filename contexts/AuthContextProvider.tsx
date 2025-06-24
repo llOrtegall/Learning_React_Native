@@ -15,11 +15,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   console.log(isAuth);
 
   const logIn = () => {
-
+    setIsAuth(true)
   }
 
   const logOut = () => {
-
+    setIsAuth(false)
   }
 
   return (
