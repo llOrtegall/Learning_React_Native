@@ -7,7 +7,7 @@ export default function RootStack() {
   if (!isAuth) {
     return (
       <Stack>
-        <Stack.Screen name="log-in" />
+        <Stack.Screen name="log-in" options={{ headerShown: false }}/>
       </Stack>
     )
   }
