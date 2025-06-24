@@ -1,4 +1,4 @@
-import { createContext, Dispatch, ReactNode, SetStateAction, useState } from "react";
+import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from "react";
 
 export interface AuthContextInterface {
   isAuth: boolean
@@ -11,6 +11,8 @@ export const AuthContext = createContext<AuthContextInterface | undefined>(undef
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuth, setIsAuth] = useState<boolean>(false);
+
+  console.log(isAuth);
 
   const logIn = () => {
 
@@ -25,4 +27,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       {children}
     </AuthContext.Provider>
   )
+}
+
+export const useAuth = () => {
+  const context = useContext(AuthContext)
+
+  if(!context){
+    throw new Error('Context provider not found')
+  }
+
+  return context
 }
