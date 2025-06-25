@@ -5,12 +5,14 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { AuthProvider, useAuth } from '../components/AuthContext';
+import { AuthProvider, useAuth } from '../contexts/auth/AuthContext';
 
 function MainLayout() {
-  const { userToken, loading } = useAuth();
+  const { loading, user } = useAuth();
+
   if (loading) return null;
-  return userToken ? (
+
+  return user ? (
     <Stack>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="+not-found" />
