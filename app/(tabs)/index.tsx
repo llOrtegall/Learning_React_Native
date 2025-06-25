@@ -1,12 +1,26 @@
 import { Image } from 'expo-image';
 import { Platform, StyleSheet } from 'react-native';
 
+import { useAuth } from '@/components/AuthContext';
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { useRouter } from 'expo-router';
 
 export default function HomeScreen() {
+  const { signOut } = useAuth()
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    try {
+      signOut();
+      router.replace('/login'); // Redirect to login screen after signing out
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  }
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -49,6 +63,15 @@ export default function HomeScreen() {
           <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
           <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
           <ThemedText type="defaultSemiBold">app-example</ThemedText>.
+        </ThemedText>
+      </ThemedView>
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Step 4: Sign out</ThemedText>
+        <ThemedText>
+          {`You can sign out by pressing the button below. This will clear your session and redirect you to the login screen.`}
+        </ThemedText>
+        <ThemedText type="defaultSemiBold" onPress={handleSignOut} style={{ color: 'blue' }}>
+          Sign Out
         </ThemedText>
       </ThemedView>
     </ParallaxScrollView>
