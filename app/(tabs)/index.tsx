@@ -1,15 +1,16 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { BackHandler, Platform, StyleSheet, Text, View } from 'react-native';
 
-import { useAuth } from '@/components/AuthContext';
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { useRouter } from 'expo-router';
+import { useAuth } from '@/contexts/auth/AuthContext';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { useCallback } from 'react';
 
 export default function HomeScreen() {
-  const { signOut } = useAuth()
+  const { user, signOut } = useAuth()
   const router = useRouter();
 
   const handleSignOut = async () => {
@@ -21,6 +22,14 @@ export default function HomeScreen() {
     }
   }
 
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => true; // Bloquea el back
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+      return () => BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    }, [])
+  );
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -30,8 +39,20 @@ export default function HomeScreen() {
           style={styles.reactLogo}
         />
       }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
+      <ThemedView>
+        <View>
+          <Text>
+            {`Welcome, ${user?.names}!`}
+          </Text>
+          <Text>
+            {`Email: ${user?.email}`}
+          </Text>
+          <Text>
+            {`Process: ${user?.process}`}
+          </Text>
+        </View>
+
+
         <HelloWave />
       </ThemedView>
       <ThemedView style={styles.stepContainer}>

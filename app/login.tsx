@@ -1,7 +1,8 @@
+import { loginUser } from '@/services/auth';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { ActivityIndicator, Alert, Button, StyleSheet, Text, TextInput, View } from 'react-native';
-import { useAuth } from '../components/AuthContext';
+import { useAuth } from '../contexts/auth/AuthContext';
 
 export default function LoginScreen() {
   const { signIn, loading } = useAuth();
@@ -12,12 +13,21 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     setSubmitting(true);
-    const success = await signIn(username, password);
-    setSubmitting(false);
-    if (!success) {
+    const tokenStr = await loginUser(username, password);
+
+    if(!tokenStr) {
+      setSubmitting(false);
       Alert.alert('Error', 'Credenciales incorrectas');
+      return;
+    }
+
+    const success = signIn(tokenStr);
+    setSubmitting(false);
+
+    if (!success) {
+      Alert.alert('Error', 'No se pudo iniciar sesión');
     } else {
-      router.replace('/'); // Redirige a la vista principal
+      router.push('/');
     }
   };
 
