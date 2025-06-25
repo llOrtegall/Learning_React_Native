@@ -1,9 +1,11 @@
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { ActivityIndicator, Alert, Button, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useAuth } from '../components/AuthContext';
 
 export default function LoginScreen() {
   const { signIn, loading } = useAuth();
+  const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -14,6 +16,8 @@ export default function LoginScreen() {
     setSubmitting(false);
     if (!success) {
       Alert.alert('Error', 'Credenciales incorrectas');
+    } else {
+      router.replace('/'); // Redirige a la vista principal
     }
   };
 
@@ -43,7 +47,7 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 24 },
+  container: { flex: 1, justifyContent: 'center', padding: 24, paddingBottom: 120 },
   title: { fontSize: 24, marginBottom: 24, textAlign: 'center' },
   input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 6, padding: 12, marginBottom: 16 },
 });
